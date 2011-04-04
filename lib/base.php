@@ -14,6 +14,18 @@ class Base {
   public $useragent = "Hyperpublic PHP beta"; /* Useragent string | @var string */
   public $ssl_verifypeer = FALSE; /* Verify SSL Cert? | @var boolean */
 
+  /**
+   * Make an HTTP GET request
+   *
+   */    
+  public function get($url = '', $train){
+    $url = $this->host . $url;
+    $data = simplexml_load_file($url);
+    $this->parse_train($data, $train);
+    //    return $this;    
+  }
+
+
   public function parse_train($data, $train) {
     $train = (string) $train;
     switch($train) {
@@ -51,16 +63,6 @@ class Base {
       echo $data->subway->line->name[9];
       break;
     }
-  }
-  /**
-   * Make an HTTP GET request
-   *
-   */    
-  public function get($url = '', $train){
-    $url = $this->host . $url;
-    $data = simplexml_load_file($url);
-    $this->parse_train($data, $train);
-    //    return $this;    
   }
 
     /* $url = $this->host . $url;
