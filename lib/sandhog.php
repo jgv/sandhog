@@ -7,15 +7,15 @@ if (preg_match("/sandhog\.php$/", $_SERVER['PHP_SELF'])){
 class Sandhog {
 
   public $train;
+  public $outages;
   
   function __construct(){
-    
     require_once(dirname(__FILE__) . '/base.php');
     require_once(dirname(__FILE__) . '/train.php');
-    //    require_once(dirname(__FILE__) . '/escalator.php');
+    require_once(dirname(__FILE__) . '/outages.php');
     
     $this->train = new Train();
-    //$this->escalator = new Escalator();
+    $this->outages = new Outages();
   }
   
 }

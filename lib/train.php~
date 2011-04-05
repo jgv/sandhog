@@ -9,8 +9,7 @@ class Train extends Base {
   public $endpoint = "/status/serviceStatus.txt";
 
     function status($train){
-      $data = $this->get($this->endpoint);      
-      $this->xml2array($data);
+      $this->get($this->endpoint, $train);      
       return $this;
     }
   

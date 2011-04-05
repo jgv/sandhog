@@ -14,13 +14,58 @@ class Base {
   public $useragent = "Hyperpublic PHP beta"; /* Useragent string | @var string */
   public $ssl_verifypeer = FALSE; /* Verify SSL Cert? | @var boolean */
 
-
   /**
    * Make an HTTP GET request
    *
    */    
-  public function get($url = ''){
+  public function get($url = '', $train){
     $url = $this->host . $url;
+    $data = simplexml_load_file($url);
+    $this->parse_train($data, $train);
+    //    return $this;    
+  }
+
+
+  public function parse_train($data, $train) {
+    $train = (string) $train;
+    switch($train) {
+    case ("1" || "2" || "3"):  
+      echo $data->subway->line->name[0];
+      break;
+    case ("4" || "5" || "6"):
+      echo $data->subway->line->name[1];
+      break;
+    case "7":
+      echo $data->subway->line->name[2];
+      break;
+    case ("A" || "C" || "E"):
+      echo $data->subway->line->name[3];
+      break;
+    case ("B" || "D" || "F" || "M"):
+      echo $data->subway->line->name[4];
+      break;
+    case "G":
+      echo $data->subway->line->name[5];
+      break;
+    case ("J" || "Z"):
+      echo $data->subway->line->name[6];
+      break;
+    case "L":
+      echo $data->subway->line->name[7];
+      break;
+    case ("N" || "Q" || "R" ):
+      echo $data->subway->line->name[8];
+      break;
+    case "S":
+      echo $data->subway->line->name[9];
+      break;
+    case "SIR":
+      echo $data->subway->line->name[9];
+      break;
+    }
+  }
+
+    /* $url = $this->host . $url;
     $response = $this->http($url, 'GET');
     $response = json_decode($response);
     if (isset($response)){
@@ -32,7 +77,40 @@ class Base {
       return FALSE;
     }
   }
+    */
 
+  public function xml2array($xml) { 
+    if(get_class($xml) != 'SimpleXMLElement') { 
+      $xml = simplexml_load_string($xml); 
+    } 
+    if(!$xml) { 
+      return false; 
+    } 
+    $main = $xml->getName(); 
+    $arr  = array(); 
+    $nodes = $xml->children(); 
+    foreach($nodes as $node) { 
+      $nodeName        = $node->getName(); 
+      $nodeAttributes  = $node->attributes(); 
+      $attributesArray = array(); 
+      foreach($nodeAttributes as $attributeName => $attributeValue) { 
+        $attributesArray[$attributeName] = (string) $attributeValue; 
+      } 
+      $nodeValue = sizeOf($node->children()) == 0 ? trim($node) : xml2array($node); 
+      if(!isSet($arr[$nodeName]['value'])) { 
+        $arr[$nodeName]['value']      = $nodeValue; 
+        $arr[$nodeName]['attributes'] = $attributesArray; 
+      } else { 
+        if(!is_array($arr[$nodeName]['value'])) { 
+          $arr[$nodeName]['value'][]      = array_shift($arr[$nodeName]); 
+          $arr[$nodeName]['attributes'][] = array_shift($arr[$nodeName]['attributes']); 
+        } 
+        $arr[$nodeName]['value'][]      = $nodeValue; 
+        $arr[$nodeName]['attributes'][] = $attributesArray; 
+      } 
+    } 
+    return($arr); 
+  } 
 
 
   /**

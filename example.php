@@ -8,8 +8,20 @@ require_once('lib/sandhog.php');
 
 $test = new Sandhog();
 
-$stat = $test->train->status('L');
+$stat = $test->train->line('g');
+echo "<br>";
+echo $stat->status;
+echo $stat->name;
+echo $stat->plannedworkheadline;
+echo "<br>";
+$a = $test->train->line('a');
+echo $a->status;
+echo $a->name;
+echo $a->plannedworkheadline;
+echo "<br>";
 
-//print_r($stat);
+$outage = $test->outages->all(null);
 
-//print_r($test->train->status('L'));
+echo $outage->outage->station;
+echo "<br>";
+echo $outage->outage->serving;
