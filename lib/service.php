@@ -4,7 +4,7 @@ if (preg_match("/train\.php$/", $_SERVER['PHP_SELF'])){
 	exit('No direct script access allowed');
 }
 
-class Train extends Base {
+class Service extends Base {
 
   public $status;
   public $service;
@@ -13,8 +13,8 @@ class Train extends Base {
   public $plannedworkheadline;
   public $endpoint = "/status/serviceStatus.txt";
 
-    function line($train){
-      $this->get($this->endpoint, $train);
+    function status($transpo){
+      $this->get($this->endpoint, $transpo);
       return $this;
     }
   
