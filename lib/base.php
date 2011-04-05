@@ -79,7 +79,7 @@ class Base {
     case "BXM1":
     case "BXM18":
       return (object) $data->bus->line[4];
-    case "M!":
+    case "M1":
     case "M116":
       return (object) $data->bus->line[5];
     case "N1":
