@@ -7,4 +7,4 @@ p. For example, you can get the status of the L train with the following code.
 bc. $status = new Sandhog();
 echo $status->service->status('l');
 
-p. You can query Sandhog for every subway and major bridge for now. All the buses are yet to be added. Check out @example.php@.
+p. You can query Sandhog for every subway and major bridge/tunnel for now. All the buses are yet to be added. Right now only a few are covered. Check out @example.php@.
