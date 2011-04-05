@@ -5,6 +5,6 @@ p. Sandhog allows developers to easily use some of the MTA's webservices by abst
 p. For example, you can get the status of the L train with the following code.
 
 bc. $status = new Sandhog();
-    echo $status->service->status('l');
+echo $status->service->status('l');
 
 p. You can query Sandhog for every subway and major bridge for now. All the buses are yet to be added. Check out @example.php@.
