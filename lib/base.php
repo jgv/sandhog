@@ -14,12 +14,7 @@ class Base {
   public function get($url = '', $params){
     $url = $this->host . $url;
     $data = simplexml_load_file($url);    
-    // really brittle sorrrrrrrrry 
-    if (strstr($url, "developers")) {      
-      $xml = $this->parse_outages($data, $params);
-    } else {
-      $xml = $this->parse_service($data, $params);
-    }    
+    $xml = $this->parse_service($data, $params);
     if (is_object($xml)){
       foreach($xml as $k => $v) {
         $this->{$k} = $v;
@@ -28,10 +23,6 @@ class Base {
     } else {
       return FALSE;
     }
-  }
-
-  public function parse_outages($data, $params) {    
-    return (object) $data->outage;
   }
 
   public function parse_service($data, $transpo) {

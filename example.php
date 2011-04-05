@@ -45,8 +45,10 @@ echo $stat->name;
 echo $stat->plannedworkheadline;
 echo "<br>";
 
-//$outage = $test->outages->all(null);
+$outage = $test->outages->station('125th street station');
 
-//echo $outage->outage->station;
+//print_r($outage);
+
+echo $outage->station;
 //echo "<br>";
 //echo $outage->outage->serving;

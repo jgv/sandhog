@@ -12,10 +12,10 @@ class Sandhog {
   function __construct(){
     require_once(dirname(__FILE__) . '/base.php');
     require_once(dirname(__FILE__) . '/service.php');
-    require_once(dirname(__FILE__) . '/outages.php');
+    //require_once(dirname(__FILE__) . '/outages.php');
     
     $this->service = new Service();
-    $this->outages = new Outages();
+    //$this->outages = new Outages();
   }
   
 }
