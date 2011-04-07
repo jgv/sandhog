@@ -17,7 +17,7 @@ class Base {
     $xml = $this->parse_service($data, $params);
     if (is_object($xml)){
       foreach($xml as $k => $v) {
-        $this->{$k} = $v;
+        $this->{$k} = strip_tags($v);
       }
       return $this;
     } else {
