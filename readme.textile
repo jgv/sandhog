@@ -8,3 +8,21 @@ bc. $status = new Sandhog();
 echo $status->service->status('l');
 
 p. You can query Sandhog for every subway and major bridge/tunnel for now. All the buses are yet to be added. Right now only a few are covered. Check out @example.php@.
+
+h2. Features
+
+* Don't worry about navigating unruly XML. Just use @$data = new Sandhog();@ and you're good to go.
+** Furthermore, you don't have to worry about bridges vs tunnels vs subway. Just use @service->whatever()@.
+* Don't worry about bad/dirty data. Sandhog automatically strips away any HTML because it likes to make your life easier.
+
+h2. Sandhog API
+
+bc. service->
+status()    // returns the status of a subway line, Metro North Train, bridge, or tunnel
+name()     // returns the name of a subway line, Metro North Train, bridge, or tunnel
+text()       // returns any text explaining the status. this usually occurs when the status() != good service
+plannedworkheadline()    // returns the headline summarizing any planned work (protip: this only works with subways)
+date()    // not exactly sure what this is referring to since the feed is allegedly updated every 60 seconds
+time()    // see above
+
+p. What's a "Sandhog":http://en.wikipedia.org/wiki/Sandhog?
