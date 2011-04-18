@@ -11,10 +11,10 @@ class Base {
    * Make an HTTP GET request
    *
    */    
-  public function get($url = '', $params){
+  public function get($url = '', $transpo){
     $url = $this->host . $url;
-    $data = simplexml_load_file($url);    
-    $xml = $this->parse_service($data, $params);
+    $data = simplexml_load_file($url);        
+    $xml = $this->parse_service($data, $transpo);
     if (is_object($xml)){
       foreach($xml as $k => $v) {
         $this->{$k} = strip_tags($v);
@@ -25,9 +25,77 @@ class Base {
     }
   }
 
-  public function parse_service($data, $transpo) {
-    $transpo = (string) $transpo;
-    $transpo = strtoupper($transpo);
+  public function bus ($data, $transpo){
+    // B1 - B103
+    if (preg_match("/^[B]\d+/", $transpo, $match)) {
+      print_r($match);
+      if ($match[1] >= 1 and $match[1] <= 103 ) {
+        return (object) $data->bus->line[0];
+      } elseif ($match[1] >= 100 and $match[1] <= 103) {
+        return (object) $data->bus->line[1];
+      } else {
+        return false;
+      }
+    }
+    // BM1 - BM5
+    if (preg_match("/^[BM]\d+/", $transpo, $match)) {
+      if ($match[1] >= 1 and $match[1] <= 5){
+        return (object) $data->bus->line[2];
+      } else {
+        return false;
+      }
+    }
+    // BX1 - BX55
+    if (preg_match("/^[BX]\d+/", $transpo, $match)) {
+      if ($match[1] >= 1 and $match[1] <= 55) {
+        return (object) $data->bus->line[3];
+      }
+    }
+    // BXM1 - BXM18
+    if (preg_match("/^[BXM]\d+/", $tranpso, $match)) {
+      if ($match[1] >= 1 and $match[1] <= 18) {
+        return (object) $data->bus->line[4];
+      }
+    }
+    // M1 - M116
+    if (preg_match("/^[M]\d+/", $transpo, $match)){
+      if ($match[1] >= 1 and $match[1] <= 116) {
+        return (object) $data->bus->line[5];
+      }
+    }
+    // N1 - N88
+    if (preg_match("/^[N]\d+/", $transpo, $match)) {
+      if ($match[1] >= 1 and $match[1] <= 88) {
+        return (object) $data->bus->line[6];
+      }
+    }
+    // Q1 - Q113
+    if (preg_match("/^[Q]\d+/", $transpo, $match)) {
+      if ($match[1] >= 1 and $match[1] <= 113) {
+        return (object) $data->bus->line[7];
+      }
+    }
+      // QM1 - QM25
+    if (preg_match("/^[QM]\d+/", $transpo, $match)) {
+      if ($match[1] >= 1 and $match[1] <= 25) {
+        return (object) $data->bus->line[8];
+      }
+    }
+    // S40 - S98
+    if (preg_match("/^[S]\d+/", $transpo, $match)) {
+      if ($match[1] >= 40 and $match[1] <= 98) {
+        return (object) $data->bus->line[9];
+      }
+    }
+    // X1 - X68
+    if (preg_match("/^[X]\d+/", $transpo, $match)) {
+      if ($match[1] >= 10 and $match[1] <= 68) {
+        return (object) $data->bus->line[10];
+      }
+    }
+  }
+
+  public function subway ($data, $transpo){
     switch ($transpo) {
     case "1":  
     case "2":
@@ -97,6 +165,11 @@ class Base {
     case "X1":
     case "X68":
       return (object) $data->bus->line[10];
+    }
+  }
+  
+  public function bridgeTunnel($data,$transpo){
+    switch ($transpo) {
     case "THROGS NECK":
       return (object) $data->BT->line[0];
     case "HENRY HUDSON":
@@ -159,4 +232,19 @@ class Base {
       return FALSE;
     }
   }
+
+
+  public function parse_service($data, $transpo) {
+    $transpo = (string) $transpo;
+    $transpo = strtoupper($transpo);
+    if (strlen($transpo) > 3) {
+      $this->bridgeTunnel($data, $transpo);
+    } elseif ( strlen($transpo) == 1 || strpos($transpo, "SIR") != false ) {
+      $this->subway($data, $transpo);
+    } else {
+      $this->bus($data, $transpo);
+    }    
+  }
+
+
 }
