@@ -8,7 +8,7 @@ class Base {
   public $host = "http://mta.info"; /* MTA API base URL (there is no real base url...) | @var string */
 
   /**
-   * Make an HTTP GET request
+   * Make an HTTP GET request and return some data
    *
    */    
   public function get($url = '', $transpo){
@@ -25,13 +25,20 @@ class Base {
     }
   }
 
-  public function bus ($data, $transpo){
+  /**
+   *
+   * Parse data if param is a bus
+   *
+   * $data simplexml object
+   * $transpo string
+   */
+  public function bus($data, $transpo) {
     // B1 - B103
     if (preg_match("/^[B]\d+/", $transpo, $match)) {
-      print_r($match);
-      if ($match[1] >= 1 and $match[1] <= 103 ) {
+      $bus = trim($match[0],"B");
+      if ($bus >= 1 and $bus <= 103 ) {
         return (object) $data->bus->line[0];
-      } elseif ($match[1] >= 100 and $match[1] <= 103) {
+      } elseif ($bus >= 100 and $bus <= 103) {    
         return (object) $data->bus->line[1];
       } else {
         return false;
@@ -39,7 +46,8 @@ class Base {
     }
     // BM1 - BM5
     if (preg_match("/^[BM]\d+/", $transpo, $match)) {
-      if ($match[1] >= 1 and $match[1] <= 5){
+      $bus = trim($match[0],"BM");
+      if ($bus >= 1 and $bus <= 5){
         return (object) $data->bus->line[2];
       } else {
         return false;
@@ -47,55 +55,70 @@ class Base {
     }
     // BX1 - BX55
     if (preg_match("/^[BX]\d+/", $transpo, $match)) {
-      if ($match[1] >= 1 and $match[1] <= 55) {
+      $bus = trim($match[0],"BX");
+      if ($bus >= 1 and $bus <= 55) {
         return (object) $data->bus->line[3];
       }
     }
     // BXM1 - BXM18
-    if (preg_match("/^[BXM]\d+/", $tranpso, $match)) {
-      if ($match[1] >= 1 and $match[1] <= 18) {
+    if (preg_match("/^[BXM]\d+/", $transpo, $match)) {
+      $bus = trim($match[0],"BXM");
+      if ($bus >= 1 and $bus <= 18) {
         return (object) $data->bus->line[4];
       }
     }
     // M1 - M116
     if (preg_match("/^[M]\d+/", $transpo, $match)){
-      if ($match[1] >= 1 and $match[1] <= 116) {
+      $bus = trim($match[0],"M");
+      if ($bus >= 1 and $bus <= 116) {
         return (object) $data->bus->line[5];
       }
     }
     // N1 - N88
     if (preg_match("/^[N]\d+/", $transpo, $match)) {
-      if ($match[1] >= 1 and $match[1] <= 88) {
+      $bus = trim($match[0],"N");
+      if ($bus >= 1 and $bus <= 88) {
         return (object) $data->bus->line[6];
       }
     }
     // Q1 - Q113
     if (preg_match("/^[Q]\d+/", $transpo, $match)) {
-      if ($match[1] >= 1 and $match[1] <= 113) {
+      $bus = trim($match[0],"Q");
+      if ($bus >= 1 and $bus <= 113) {
         return (object) $data->bus->line[7];
       }
     }
       // QM1 - QM25
     if (preg_match("/^[QM]\d+/", $transpo, $match)) {
-      if ($match[1] >= 1 and $match[1] <= 25) {
+      $bus = trim($match[0],"QM");
+      if ($bus >= 1 and $bus <= 25) {
         return (object) $data->bus->line[8];
       }
     }
     // S40 - S98
     if (preg_match("/^[S]\d+/", $transpo, $match)) {
-      if ($match[1] >= 40 and $match[1] <= 98) {
+      $bus = trim($match[0],"S");
+      if ($bus >= 40 and $bus <= 98) {
         return (object) $data->bus->line[9];
       }
     }
     // X1 - X68
     if (preg_match("/^[X]\d+/", $transpo, $match)) {
-      if ($match[1] >= 10 and $match[1] <= 68) {
+      $bus = trim($match[0],"X");
+      if ($bus >= 10 and $bus <= 68) {
         return (object) $data->bus->line[10];
       }
     }
   }
 
-  public function subway ($data, $transpo){
+  /**
+   *
+   * Parse data if a subway
+   * $data simplexml object
+   * $transpo string
+   *
+   */
+  public function subway($data, $transpo){
     switch ($transpo) {
     case "1":  
     case "2":
@@ -131,43 +154,16 @@ class Base {
       return (object) $data->subway->line[9];
     case "SIR":
       return (object) $data->subway->line[10];
-    case "B1":
-    case "B83":
-      return (object) $data->bus->line[0];
-    case "B100":
-    case "B103":
-      return (object) $data->bus->line[1];
-      break;
-    case "BM1":
-    case "BM5":
-      return (object) $data->bus->line[2];
-    case "BX1":
-    case "BX55":
-      return (object) $data->bus->line[3];
-    case "BXM1":
-    case "BXM18":
-      return (object) $data->bus->line[4];
-    case "M1":
-    case "M116":
-      return (object) $data->bus->line[5];
-    case "N1":
-    case "N88":
-      return (object) $data->bus->line[6];
-    case "Q1":
-    case "Q113":
-      return (object) $data->bus->line[7];
-    case "QM1":
-    case "QM25":
-      return (object) $data->bus->line[8];
-    case "S40":
-    case "S98":
-      return (object) $data->bus->line[9];
-    case "X1":
-    case "X68":
-      return (object) $data->bus->line[10];
     }
   }
   
+  /**
+   *
+   * Parse data if a bridge, tunnel, LIRR, or MetroNorth
+   * $data simplexml object
+   * $transpo $string
+   *
+   */
   public function bridgeTunnel($data,$transpo){
     switch ($transpo) {
     case "THROGS NECK":
@@ -233,18 +229,24 @@ class Base {
     }
   }
 
+  /**
+   *
+   * Figure out where to send the data
+   * $data simplexml object
+   * $transpo string
+   *
+   */
 
   public function parse_service($data, $transpo) {
     $transpo = (string) $transpo;
     $transpo = strtoupper($transpo);
     if (strlen($transpo) > 3) {
-      $this->bridgeTunnel($data, $transpo);
+      return $this->bridgeTunnel($data, $transpo);
     } elseif ( strlen($transpo) == 1 || strpos($transpo, "SIR") != false ) {
-      $this->subway($data, $transpo);
+      return $this->subway($data, $transpo);      
     } else {
-      $this->bus($data, $transpo);
-    }    
+      return $this->bus($data, $transpo);
+    }
   }
-
 
 }

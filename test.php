@@ -10,3 +10,4 @@ $sandhog = new Sandhog();
 
 
 $train = $sandhog->service->status('b4');
+echo $train->status;
